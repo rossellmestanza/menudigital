@@ -5,9 +5,5 @@
     "framework": "nextjs",
     "regions": [
         "gru1"
-    ],
-    "env": {
-        "MONGODB_URI": "@mongodb-uri",
-        "JWT_SECRET": "@jwt-secret"
-    }
+    ]
 }
