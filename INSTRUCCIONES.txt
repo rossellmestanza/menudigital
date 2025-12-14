@@ -1,0 +1,138 @@
+# Instrucciones para Configuración y Uso
+
+## ⚡ CONFIGURACIÓN INICIAL RÁPIDA
+
+### 1. Configurar MongoDB Atlas (5 minutos)
+
+**IMPORTANTE:** Antes de ejecutar la aplicación, necesitas configurar MongoDB Atlas (GRATIS):
+
+1. Ve a: https://www.mongodb.com/cloud/atlas
+2. Crea una cuenta gratuita
+3. Crea un cluster gratuito (M0)
+4. Crea un usuario de base de datos
+5. En Network Access, permite IP: `0.0.0.0/0`
+6. Obtén tu connection string
+
+**Guía detallada:** Ver `docs/MONGODB-SETUP.md`
+
+### 2. Configurar Variables de Entorno
+
+Abre el archivo `.env.local` y actualiza:
+
+```env
+# Reemplaza con tu connection string de MongoDB Atlas
+MONGODB_URI=mongodb+srv://TU-USUARIO:TU-PASSWORD@cluster.mongodb.net/menu-digital?retryWrites=true&w=majority
+
+# Genera una clave aleatoria segura
+JWT_SECRET=tu-clave-secreta-minimo-32-caracteres
+
+# Información de tu restaurante
+NEXT_PUBLIC_RESTAURANT_NAME=Nombre de Tu Restaurante
+NEXT_PUBLIC_WHATSAPP_NUMBER=51999999999
+```
+
+### 3. Inicializar Base de Datos
+
+```bash
+node scripts/init-db.js
+```
+
+Este comando creará:
+- Usuario administrador (admin / admin123)
+- Categorías de ejemplo
+- Productos de ejemplo con comida peruana
+- Configuración inicial
+
+### 4. Ejecutar la Aplicación
+
+```bash
+npm run dev
+```
+
+Abre tu navegador en: **http://localhost:3000**
+
+### 5. Acceder al Panel de Administración
+
+Ve a: **http://localhost:3000/admin**
+
+Credenciales por defecto:
+- **Usuario:** admin
+- **Contraseña:** admin123
+
+⚠️ **IMPORTANTE:** Cambia estas credenciales después del primer acceso.
+
+---
+
+## 📖 Guías Disponibles
+
+- **INICIO-RAPIDO.md** - Guía rápida de inicio
+- **README.md** - Documentación completa
+- **docs/MONGODB-SETUP.md** - Configuración detallada de MongoDB
+- **docs/DEPLOY-VERCEL.md** - Cómo subir a producción
+
+---
+
+## 🎯 Funcionalidades
+
+### Menú para Clientes (/)
+- Ver productos organizados por categorías
+- Filtrar por categoría
+- Agregar productos al carrito
+- Enviar pedido por WhatsApp
+
+### Panel de Administración (/admin)
+- **Productos:** Crear, editar, eliminar productos
+- **Categorías:** Gestionar categorías del menú
+- **Configuración:** Actualizar información del restaurante
+
+---
+
+## 🎨 Personalización
+
+### Cambiar Colores
+
+Edita `tailwind.config.js`:
+
+```javascript
+colors: {
+  primary: '#FF6B35',   // Color principal (naranja)
+  secondary: '#004E89', // Color secundario (azul)
+  accent: '#F7931E',    // Color de acento (dorado)
+  dark: '#1A1A1A',      // Texto oscuro
+}
+```
+
+### Cambiar Información del Restaurante
+
+Desde el panel admin → Configuración:
+- Nombre del restaurante
+- Número de WhatsApp
+- Símbolo de moneda (S/ por defecto)
+- Mensaje de bienvenida
+
+---
+
+## 🚀 Siguiente Paso: DEPLOY en Vercel
+
+Cuando tu menú esté listo, súbelo GRATIS a Vercel:
+
+Ver guía completa: **docs/DEPLOY-VERCEL.md**
+
+Resumen:
+```bash
+npm install -g vercel
+vercel login
+vercel
+```
+
+---
+
+## 📞 ¿Necesitas Ayuda?
+
+1. Revisa **INICIO-RAPIDO.md** para solución de problemas comunes
+2. Revisa las guías en la carpeta **docs/**
+3. Verifica que MongoDB Atlas esté configurado correctamente
+
+---
+
+¡Éxito con tu menú digital! 🍽️✨
