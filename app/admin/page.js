@@ -101,18 +101,6 @@ export default function AdminLoginPage() {
                         ← Volver al menú
                     </a>
                 </div>
-
-                <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-sm text-blue-800 font-semibold mb-2">
-                        📝 Credenciales por defecto:
-                    </p>
-                    <p className="text-sm text-blue-700">
-                        Usuario: <code className="bg-blue-100 px-2 py-1 rounded">admin</code>
-                    </p>
-                    <p className="text-sm text-blue-700">
-                        Contraseña: <code className="bg-blue-100 px-2 py-1 rounded">admin123</code>
-                    </p>
-                </div>
             </div>
         </div>
     )

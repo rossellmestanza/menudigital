@@ -1,0 +1,64 @@
+const sendWhatsAppOrder = () => {
+    if (cart.length === 0) return
+
+    // Validate required fields
+    if (orderType === 'delivery') {
+        if (!customerName || !customerPhone || !deliveryAddress) {
+            alert('⚠️ Por favor completa: Nombre, Teléfono y Dirección')
+            return
+        }
+    } else if (orderType === 'llevar') {
+        if (!customerName || !customerPhone) {
+            alert('⚠️ Por favor completa: Nombre y Teléfono')
+            return
+        }
+    } else if (orderType === 'mesa') {
+        if (!tableNumber) {
+            alert('⚠️ Por favor indica el número de mesa')
+            return
+        }
+    }
+
+    // Order type header
+    let orderTypeText = ''
+    if (orderType === 'delivery') orderTypeText = '🚚 *DELIVERY*'
+    else if (orderType === 'llevar') orderTypeText = '🛍️ *PARA LLEVAR*'
+    else if (orderType === 'mesa') orderTypeText = '🍽️ *EN MESA*'
+
+    // Products list
+    const productsList = cart
+        .map(
+            (item) =>
+                `• ${item.name} x${item.quantity} - ${config?.currency || 'S/'}${(
+                    item.price * item.quantity
+                ).toFixed(2)}`
+        )
+        .join('\\n')
+
+    // Customer info
+    let customerInfo = ''
+    if (orderType === 'delivery') {
+        customerInfo = `\\n📋 *DATOS:*\\nNombre: ${customerName}\\nTeléfono: ${customerPhone}\\nDirección: ${deliveryAddress}\\nPago: ${paymentMethod.toUpperCase()}`
+        if (observations) customerInfo += `\\nObservaciones: ${observations}`
+    } else if (orderType === 'llevar') {
+        customerInfo = `\\n📋 *DATOS:*\\nNombre: ${customerName}\\nTeléfono: ${customerPhone}`
+    } else if (orderType === 'mesa') {
+        customerInfo = `\\n🔢 *MESA:* ${tableNumber}`
+    }
+
+    const message = `¡Hola! Quiero hacer un pedido:\\n\\n${orderTypeText}\\n\\n${productsList}${customerInfo}\\n\\n💰 *Total: ${config?.currency || 'S/'}${getTotal().toFixed(2)}*`
+
+    const whatsappNumber = config?.whatsappNumber || '51999999999'
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
+
+    window.open(url, '_blank')
+    
+    // Reset form
+    setShowCart(false)
+    setCart([])
+    setCustomerName('')
+    setCustomerPhone('')
+    setDeliveryAddress('')
+    setTableNumber('')
+    setObservations('')
+}

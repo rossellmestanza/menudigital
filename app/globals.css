@@ -8,8 +8,14 @@
     --secondary: #004E89;
     --accent: #F7931E;
     --dark: #1A1A1A;
+
+    /* Dynamic theme colors (changed via JavaScript) */
+    --color-primary: #FF6B35;
+    --color-secondary: #004E89;
+    --color-accent: #F7931E;
+    --color-dark: #1A1A1A;
   }
-  
+
   body {
     @apply bg-white text-gray-900;
   }
@@ -19,19 +25,19 @@
   .btn-primary {
     @apply bg-primary hover:bg-opacity-90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-0.5;
   }
-  
+
   .btn-secondary {
     @apply bg-secondary hover:bg-opacity-90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-0.5;
   }
-  
+
   .card {
     @apply bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1;
   }
-  
+
   .input-field {
     @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200;
   }
-  
+
   .section-title {
     @apply text-3xl md:text-4xl font-bold text-dark mb-8 text-center;
   }
@@ -43,6 +49,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -63,4 +70,80 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+}
+
+/* ===== MEJORAS RESPONSIVE ===== */
+
+/* Scroll horizontal suave en categorías */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Optimización para móviles */
+@media (max-width: 768px) {
+
+  /* Modales ocupan casi toda la pantalla en móvil */
+  .modal-mobile {
+    max-height: 90vh;
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  /* Botones más grandes para touch */
+  .btn-primary,
+  .btn-secondary {
+    @apply py-4 px-6 text-base;
+  }
+
+  /* Cards más compactas */
+  .card {
+    @apply p-4;
+  }
+
+  /* Inputs más grandes para móvil */
+  .input-field {
+    @apply text-base py-3;
+  }
+}
+
+/* Muy pequeñas pantallas */
+@media (max-width: 640px) {
+
+  /* Títulos más pequeños */
+  .section-title {
+    @apply text-2xl;
+  }
+
+  /* Botones flotantes más pequeños */
+  .cart-fab {
+    @apply w-14 h-14 bottom-4 right-4;
+  }
+
+  /* Grid de productos en una columna */
+  .products-grid-mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  /* Grid de 2 columnas en tablets */
+  .products-grid-tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Landscape móviles */
+@media (max-height: 600px) and (orientation: landscape) {
+
+  /* Modales más compactos en landscape */
+  .modal-landscape {
+    max-height: 95vh;
+    padding: 1rem;
+  }
 }

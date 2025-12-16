@@ -71,22 +71,36 @@ export async function PUT(request) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
         }
 
-        const { id, ...data } = await request.json()
+        const data = await request.json()
         const client = await clientPromise
         const db = client.db('menu-digital')
 
-        await db.collection('categories').updateOne(
-            { _id: new ObjectId(id) },
+        // Extract _id and remove it from update data
+        const categoryId = data._id || data.id
+        if (!categoryId) {
+            return NextResponse.json({ error: 'ID de categoría requerido' }, { status: 400 })
+        }
+
+        // Remove _id and id from data to avoid MongoDB error
+        const { _id, id, ...updateData } = data
+
+        const result = await db.collection('categories').updateOne(
+            { _id: new ObjectId(categoryId) },
             {
                 $set: {
-                    ...data,
+                    ...updateData,
                     updatedAt: new Date(),
                 },
             }
         )
 
+        if (result.matchedCount === 0) {
+            return NextResponse.json({ error: 'Categoría no encontrada' }, { status: 404 })
+        }
+
         return NextResponse.json({ success: true })
     } catch (error) {
+        console.error('Error al actualizar categoría:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }

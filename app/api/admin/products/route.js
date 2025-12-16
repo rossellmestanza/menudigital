@@ -71,22 +71,36 @@ export async function PUT(request) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
         }
 
-        const { id, ...data } = await request.json()
+        const data = await request.json()
         const client = await clientPromise
         const db = client.db('menu-digital')
 
-        await db.collection('products').updateOne(
-            { _id: new ObjectId(id) },
+        // Extract _id and remove it from update data
+        const productId = data._id || data.id
+        if (!productId) {
+            return NextResponse.json({ error: 'ID de producto requerido' }, { status: 400 })
+        }
+
+        // Remove _id and id from data to avoid MongoDB error
+        const { _id, id, ...updateData } = data
+
+        const result = await db.collection('products').updateOne(
+            { _id: new ObjectId(productId) },
             {
                 $set: {
-                    ...data,
+                    ...updateData,
                     updatedAt: new Date(),
                 },
             }
         )
 
+        if (result.matchedCount === 0) {
+            return NextResponse.json({ error: 'Producto no encontrado' }, { status: 404 })
+        }
+
         return NextResponse.json({ success: true })
     } catch (error) {
+        console.error('Error al actualizar producto:', error)
         return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }

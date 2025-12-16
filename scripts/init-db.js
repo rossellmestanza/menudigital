@@ -146,10 +146,22 @@ async function initDatabase() {
                 _id: 'main',
                 restaurantName: 'Mi Restaurante',
                 whatsappNumber: '51999999999',
+                phoneNumber: '51999999999',
                 currency: 'S/',
                 welcomeMessage: '¡Bienvenido a nuestro menú digital!',
                 logo: '',
                 coverImage: '',
+                socialMedia: {
+                    facebook: '',
+                    instagram: '',
+                    tiktok: ''
+                },
+                themeColors: {
+                    primary: '#FF6B35',
+                    secondary: '#004E89',
+                    accent: '#F7931E',
+                    dark: '#1A1A1A'
+                },
                 createdAt: new Date(),
             })
             console.log('✅ Configuración inicial creada\n')

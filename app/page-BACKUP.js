@@ -816,25 +816,22 @@ export default function HomePage() {
             {/* Product Details Modal */}
             {showProductDetails && selectedProduct && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end md:items-center justify-center p-4">
-                    <div className="bg-white rounded-t-3xl md:rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn relative">
-                        {/* Close Button - Fixed Top Right */}
-                        <button
-                            onClick={() => {
-                                setShowProductDetails(false)
-                                setSelectedProduct(null)
-                            }}
-                            className="absolute top-4 right-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-100 transition-all"
-                        >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                    <div className="bg-white rounded-t-3xl md:rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn">
+                        <div className="relative">
+                            <button
+                                onClick={() => {
+                                    setShowProductDetails(false)
+                                    setSelectedProduct(null)
+                                }}
+                                className="absolute top-4 right-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-100 transition-all"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
 
-                        {/* Scrollable Content Area */}
-                        <div className="flex-1 overflow-y-auto w-full">
-                            {/* Product Image - Inside scrollable area */}
                             {selectedProduct.image && (
-                                <div className="relative h-64 md:h-72 bg-gradient-to-br from-gray-100 to-gray-200">
+                                <div className="relative h-48 md:h-56 bg-gradient-to-br from-gray-100 to-gray-200">
                                     <Image
                                         src={selectedProduct.image}
                                         alt={selectedProduct.name}
@@ -843,148 +840,152 @@ export default function HomePage() {
                                     />
                                 </div>
                             )}
-
-                            {/* Content Padding */}
-                            <div className="p-6">
-                                <h2 className="text-3xl font-bold text-dark mb-2">{selectedProduct.name}</h2>
-                                <p className="text-primary font-bold text-2xl mb-4">
-                                    {config?.currency || 'S/'} {selectedProduct.price.toFixed(2)}
-                                </p>
-
-                                <div className="mb-6">
-                                    <h3 className="text-lg font-semibold text-dark mb-2">Descripción</h3>
-                                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                                        {selectedProduct.description || 'Sin descripción disponible.'}
-                                    </p>
-                                </div>
-
-                                {/* Product Variables */}
-                                {selectedProduct.variables && selectedProduct.variables.length > 0 && (
-                                    <div className="mb-6">
-                                        <h3 className="text-lg font-semibold text-dark mb-3">
-                                            🔧 Opciones {selectedProduct.variables.some(v => v.required) && <span className="text-red-500 text-sm">(Requerido)</span>}
-                                        </h3>
-                                        <div className="space-y-4">
-                                            {selectedProduct.variables.map((variable, varIndex) => (
-                                                <div key={varIndex} className="bg-gray-50 p-4 rounded-lg">
-                                                    <p className="font-semibold text-gray-700 mb-2">
-                                                        {variable.name}
-                                                        {variable.required && <span className="text-red-500 ml-1">*</span>}
-                                                    </p>
-                                                    <div className="space-y-2">
-                                                        {variable.options.map((option, optIndex) => {
-                                                            // Handle both string options and object options {name, priceModifier}
-                                                            const optionName = typeof option === 'string' ? option : option.name
-                                                            const optionValue = typeof option === 'string' ? option : option.name
-
-                                                            return (
-                                                                <label key={optIndex} className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors">
-                                                                    <input
-                                                                        type="radio"
-                                                                        name={`variable-${varIndex}`}
-                                                                        value={optionValue}
-                                                                        checked={selectedVariables[variable.name] === optionValue}
-                                                                        onChange={(e) => setSelectedVariables({
-                                                                            ...selectedVariables,
-                                                                            [variable.name]: e.target.value
-                                                                        })}
-                                                                        className="w-4 h-4 text-primary focus:ring-primary"
-                                                                    />
-                                                                    <span className="text-gray-700">{optionName}</span>
-                                                                </label>
-                                                            )
-                                                        })}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Product Extras */}
-                                {selectedProduct.extras && selectedProduct.extras.length > 0 && (
-                                    <div className="mb-6">
-                                        <h3 className="text-lg font-semibold text-dark mb-3">➕ Extras Disponibles</h3>
-                                        <div className="space-y-2">
-                                            {selectedProduct.extras.map((extra, index) => (
-                                                <label key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
-                                                    <div className="flex items-center space-x-3">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedExtras.some(e => e.name === extra.name)}
-                                                            onChange={(e) => {
-                                                                if (e.target.checked) {
-                                                                    setSelectedExtras([...selectedExtras, extra])
-                                                                } else {
-                                                                    setSelectedExtras(selectedExtras.filter(e => e.name !== extra.name))
-                                                                }
-                                                            }}
-                                                            className="w-4 h-4 text-primary focus:ring-primary rounded"
-                                                        />
-                                                        <span className="text-gray-700">{extra.name}</span>
-                                                    </div>
-                                                    <span className="font-semibold text-primary">
-                                                        +{config?.currency || 'S/'}{extra.price.toFixed(2)}
-                                                    </span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
                         </div>
 
-                        {/* Fixed Footer with Total and Add Button */}
-                        <div className="p-4 border-t border-gray-200 bg-gray-50 z-20">
+                        <div className="flex-1 overflow-y-auto p-6">
+                            <h2 className="text-3xl font-bold text-dark mb-3">{selectedProduct.name}</h2>
+
+                            <div className="flex items-center justify-between mb-4 pb-4 border-b">
+                                <span className="text-3xl font-bold text-primary">
+                                    {config?.currency || 'S/'} {selectedProduct.price.toFixed(2)}
+                                </span>
+                            </div>
+
+                            <div className="mb-6">
+                                <h3 className="text-lg font-semibold text-dark mb-2">Descripción</h3>
+                                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                                    {selectedProduct.description || 'Sin descripción disponible.'}
+                                </p>
+                            </div>
+
+                            {/* Product Variables - Interactive Selection */}
+                            {selectedProduct.variables && selectedProduct.variables.length > 0 && (
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-semibold text-dark mb-3">
+                                        🔧 Opciones {selectedProduct.variables.some(v => v.required) && <span className="text-red-500 text-sm">(Requerido)</span>}
+                                    </h3>
+                                    <div className="space-y-4">
+                                        {selectedProduct.variables.map((variable, varIndex) => (
+                                            <div key={varIndex} className="bg-gray-50 p-4 rounded-lg">
+                                                <p className="font-semibold text-gray-700 mb-2">
+                                                    {variable.name}
+                                                    {variable.required && <span className="text-red-500 ml-1">*</span>}
+                                                </p>
+                                                <div className="space-y-2">
+                                                    {variable.options.map((option, optIndex) => {
+                                                        // Handle both string options and object options {name, priceModifier}
+                                                        const optionName = typeof option === 'string' ? option : option.name
+                                                        const optionValue = typeof option === 'string' ? option : option.name
+
+                                                        return (
+                                                            <label key={optIndex} className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors">
+                                                                <input
+                                                                    type="radio"
+                                                                    name={`variable-${varIndex}`}
+                                                                    value={optionValue}
+                                                                    checked={selectedVariables[variable.name] === optionValue}
+                                                                    onChange={(e) => setSelectedVariables({
+                                                                        ...selectedVariables,
+                                                                        [variable.name]: e.target.value
+                                                                    })}
+                                                                    className="w-4 h-4 text-primary focus:ring-primary"
+                                                                />
+                                                                <span className="text-gray-700">{optionName}</span>
+                                                            </label>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Product Extras - Interactive Selection */}
+                            {selectedProduct.extras && selectedProduct.extras.length > 0 && (
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-semibold text-dark mb-3">➕ Extras Disponibles</h3>
+                                    <div className="space-y-2">
+                                        {selectedProduct.extras.map((extra, index) => (
+                                            <label key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                                                <div className="flex items-center space-x-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedExtras.some(e => e.name === extra.name)}
+                                                        onChange={(e) => {
+                                                            if (e.target.checked) {
+                                                                setSelectedExtras([...selectedExtras, extra])
+                                                            } else {
+                                                                setSelectedExtras(selectedExtras.filter(e => e.name !== extra.name))
+                                                            }
+                                                        }}
+                                                        className="w-4 h-4 text-primary focus:ring-primary rounded"
+                                                    />
+                                                    <span className="text-gray-700">{extra.name}</span>
+                                                </div>
+                                                <span className="font-semibold text-primary">
+                                                    +{config?.currency || 'S/'}{extra.price.toFixed(2)}
+                                                </span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="p-6 border-t border-gray-200 bg-gray-50">
                             {/* Price Summary */}
                             <div className="mb-4">
-                                {(selectedExtras.length > 0 || (Object.keys(selectedVariables).length > 0)) && (
-                                    <div className="flex flex-wrap gap-2 mb-3 text-xs text-gray-600">
-                                        {Object.entries(selectedVariables).map(([key, value]) => (
-                                            <span key={key} className="bg-blue-50 px-2 py-1 rounded border border-blue-100">
-                                                {key}: <b>{value}</b>
-                                            </span>
-                                        ))}
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-gray-600">Precio base:</span>
+                                    <span className="font-semibold text-gray-700">
+                                        {config?.currency || 'S/'}{selectedProduct.price.toFixed(2)}
+                                    </span>
+                                </div>
+                                {selectedExtras.length > 0 && (
+                                    <>
                                         {selectedExtras.map((extra, i) => (
-                                            <span key={i} className="bg-green-50 px-2 py-1 rounded border border-green-100">
-                                                +{extra.name}
-                                            </span>
+                                            <div key={i} className="flex items-center justify-between mb-1 text-sm">
+                                                <span className="text-gray-600">+ {extra.name}:</span>
+                                                <span className="text-gray-700">
+                                                    {config?.currency || 'S/'}{extra.price.toFixed(2)}
+                                                </span>
+                                            </div>
                                         ))}
-                                    </div>
+                                        <div className="border-t border-gray-300 my-2"></div>
+                                    </>
                                 )}
-
                                 <div className="flex items-center justify-between">
-                                    <div className="flex flex-col">
-                                        <span className="text-sm text-gray-500">Total a pagar:</span>
-                                        <span className="text-2xl font-bold text-primary">
-                                            {config?.currency || 'S/'}
-                                            {(selectedProduct.price + selectedExtras.reduce((sum, e) => sum + e.price, 0)).toFixed(2)}
-                                        </span>
-                                    </div>
-                                    <button
-                                        onClick={() => {
-                                            // Validate required variables
-                                            const requiredVars = selectedProduct.variables?.filter(v => v.required) || []
-                                            const missingRequired = requiredVars.filter(v => !selectedVariables[v.name])
-
-                                            if (missingRequired.length > 0) {
-                                                alert(`⚠️ Por favor selecciona: ${missingRequired.map(v => v.name).join(', ')}`)
-                                                return
-                                            }
-
-                                            setShowProductDetails(false)
-                                            setSelectedProduct(null)
-                                            addToCart(selectedProduct, selectedVariables, selectedExtras)
-                                        }}
-                                        className="bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center space-x-2"
-                                    >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                        <span>Agregar</span>
-                                    </button>
+                                    <span className="text-xl font-semibold text-dark">Total:</span>
+                                    <span className="text-2xl font-bold text-primary">
+                                        {config?.currency || 'S/'}
+                                        {(selectedProduct.price + selectedExtras.reduce((sum, e) => sum + e.price, 0)).toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
+
+                            <button
+                                onClick={() => {
+                                    // Validate required variables
+                                    const requiredVars = selectedProduct.variables?.filter(v => v.required) || []
+                                    const missingRequired = requiredVars.filter(v => !selectedVariables[v.name])
+
+                                    if (missingRequired.length > 0) {
+                                        alert(`⚠️ Por favor selecciona: ${missingRequired.map(v => v.name).join(', ')}`)
+                                        return
+                                    }
+
+                                    setShowProductDetails(false)
+                                    setSelectedProduct(null)
+                                    addToCart(selectedProduct, selectedVariables, selectedExtras)
+                                }}
+                                className="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                <span>Agregar al Carrito</span>
+                            </button>
                         </div>
                     </div>
                 </div>
